@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "polls",
+  "info": {
+    "singularName": "poll",
+    "pluralName": "polls",
+    "displayName": "Poll",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Options": {
+      "type": "component",
+      "repeatable": true,
+      "component": "quiz.options"
+    },
+    "Name": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "string"
+    },
+    "chapters": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chapter.chapter",
+      "mappedBy": "poll"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_feedback_comments",
+  "info": {
+    "displayName": "Comments"
+  },
+  "options": {},
+  "attributes": {
+    "Comment": {
+      "type": "string"
+    },
+    "Comment_ID": {
+      "type": "integer"
+    }
+  }
+}

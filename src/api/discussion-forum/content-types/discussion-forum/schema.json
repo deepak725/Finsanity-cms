@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discussion_forums",
+  "info": {
+    "singularName": "discussion-forum",
+    "pluralName": "discussion-forums",
+    "displayName": "DiscussionForum"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "text"
+    },
+    "chapters": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chapter.chapter",
+      "mappedBy": "discussion_forum"
+    }
+  }
+}
