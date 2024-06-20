@@ -44,11 +44,10 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "blog_feedbacks": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::blog-feedback.blog-feedback",
-      "mappedBy": "Blog"
+    "Feedbacks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "feedback.feedback"
     }
   }
 }

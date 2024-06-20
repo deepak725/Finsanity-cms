@@ -9,8 +9,7 @@
     "displayName": "User"
   },
   "options": {
-    "draftAndPublish": false,
-    "timestamps": true
+    "draftAndPublish": false
   },
   "attributes": {
     "username": {
@@ -30,25 +29,6 @@
       "type": "string",
       "configurable": false
     },
-    "password": {
-      "type": "password",
-      "minLength": 6,
-      "configurable": false,
-      "private": true,
-      "searchable": false
-    },
-    "resetPasswordToken": {
-      "type": "string",
-      "configurable": false,
-      "private": true,
-      "searchable": false
-    },
-    "confirmationToken": {
-      "type": "string",
-      "configurable": false,
-      "private": true,
-      "searchable": false
-    },
     "confirmed": {
       "type": "boolean",
       "default": false,
@@ -66,17 +46,14 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "blog_feedbacks": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::blog-feedback.blog-feedback",
-      "mappedBy": "User"
+    "picture": {
+      "type": "string"
     },
-    "course_feedbacks": {
+    "discussion_topics": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::course-feedback.course-feedback",
-      "mappedBy": "User"
+      "target": "api::discussion-topic.discussion-topic",
+      "mappedBy": "Creator"
     }
   }
 }

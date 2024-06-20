@@ -40,12 +40,6 @@
       "target": "api::course.course",
       "inversedBy": "chapters"
     },
-    "tags": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::tag.tag",
-      "mappedBy": "chapter"
-    },
     "quiz": {
       "type": "relation",
       "relation": "manyToOne",
@@ -58,11 +52,17 @@
       "target": "api::poll.poll",
       "inversedBy": "chapters"
     },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "mappedBy": "chapters"
+    },
     "discussion_forum": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "oneToOne",
       "target": "api::discussion-forum.discussion-forum",
-      "inversedBy": "chapters"
+      "mappedBy": "chapter"
     }
   }
 }

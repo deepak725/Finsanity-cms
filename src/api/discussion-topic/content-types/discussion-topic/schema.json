@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discussion_topics",
+  "info": {
+    "singularName": "discussion-topic",
+    "pluralName": "discussion-topics",
+    "displayName": "discussion-topic",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Topic": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "text"
+    },
+    "Creator": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "discussion_topics"
+    },
+    "Topic_responses": {
+      "type": "component",
+      "repeatable": true,
+      "component": "feedback.feedback"
+    },
+    "Discussion_forum_details": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discussion-forum.discussion-forum",
+      "inversedBy": "discussion_topics"
+    }
+  }
+}

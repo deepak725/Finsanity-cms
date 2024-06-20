@@ -4,7 +4,8 @@
   "info": {
     "singularName": "discussion-forum",
     "pluralName": "discussion-forums",
-    "displayName": "DiscussionForum"
+    "displayName": "DiscussionForum",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,11 +18,17 @@
     "Description": {
       "type": "text"
     },
-    "chapters": {
+    "chapter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::chapter.chapter",
+      "inversedBy": "discussion_forum"
+    },
+    "discussion_topics": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::chapter.chapter",
-      "mappedBy": "discussion_forum"
+      "target": "api::discussion-topic.discussion-topic",
+      "mappedBy": "Discussion_forum_details"
     }
   }
 }

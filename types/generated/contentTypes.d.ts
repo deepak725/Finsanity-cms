@@ -695,7 +695,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -710,13 +709,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         minLength: 6;
       }>;
     provider: Attribute.String;
-    password: Attribute.Password &
-      Attribute.Private &
-      Attribute.SetMinMaxLength<{
-        minLength: 6;
-      }>;
-    resetPasswordToken: Attribute.String & Attribute.Private;
-    confirmationToken: Attribute.String & Attribute.Private;
     confirmed: Attribute.Boolean & Attribute.DefaultTo<false>;
     blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
     role: Attribute.Relation<
@@ -724,15 +716,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    blog_feedbacks: Attribute.Relation<
+    picture: Attribute.String;
+    discussion_topics: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
-      'api::blog-feedback.blog-feedback'
-    >;
-    course_feedbacks: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::course-feedback.course-feedback'
+      'api::discussion-topic.discussion-topic'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -798,6 +786,121 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
+export interface PluginCommentsComment extends Schema.CollectionType {
+  collectionName: 'comments_comment';
+  info: {
+    tableName: 'plugin-comments-comments';
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
+    description: 'Comment content type';
+    kind: 'collectionType';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text & Attribute.Required;
+    blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
+    blockedThread: Attribute.Boolean & Attribute.DefaultTo<false>;
+    blockReason: Attribute.String;
+    authorUser: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    authorId: Attribute.String;
+    authorName: Attribute.String;
+    authorEmail: Attribute.Email;
+    authorAvatar: Attribute.String;
+    isAdminComment: Attribute.Boolean;
+    removed: Attribute.Boolean;
+    approvalStatus: Attribute.String;
+    related: Attribute.String;
+    reports: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToMany',
+      'plugin::comments.comment-report'
+    >;
+    threadOf: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToOne',
+      'plugin::comments.comment'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentsCommentReport extends Schema.CollectionType {
+  collectionName: 'comments_comment-report';
+  info: {
+    tableName: 'plugin-comments-reports';
+    singularName: 'comment-report';
+    pluralName: 'comment-reports';
+    displayName: 'Reports';
+    description: 'Reports content type';
+    kind: 'collectionType';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text;
+    reason: Attribute.Enumeration<['BAD_LANGUAGE', 'DISCRIMINATION', 'OTHER']> &
+      Attribute.Required &
+      Attribute.DefaultTo<'OTHER'>;
+    resolved: Attribute.Boolean & Attribute.DefaultTo<false>;
+    related: Attribute.Relation<
+      'plugin::comments.comment-report',
+      'manyToOne',
+      'plugin::comments.comment'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comments.comment-report',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comments.comment-report',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiBlogBlog extends Schema.CollectionType {
   collectionName: 'blogs';
   info: {
@@ -820,58 +923,13 @@ export interface ApiBlogBlog extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    blog_feedbacks: Attribute.Relation<
-      'api::blog.blog',
-      'oneToMany',
-      'api::blog-feedback.blog-feedback'
-    >;
+    Feedbacks: Attribute.Component<'feedback.feedback', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::blog.blog', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::blog.blog', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiBlogFeedbackBlogFeedback extends Schema.CollectionType {
-  collectionName: 'blog_feedbacks';
-  info: {
-    singularName: 'blog-feedback';
-    pluralName: 'blog-feedbacks';
-    displayName: 'BlogFeedback';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Blog: Attribute.Relation<
-      'api::blog-feedback.blog-feedback',
-      'manyToOne',
-      'api::blog.blog'
-    >;
-    User: Attribute.Relation<
-      'api::blog-feedback.blog-feedback',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    Feedback: Attribute.Component<'feedback.feedback', true>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::blog-feedback.blog-feedback',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::blog-feedback.blog-feedback',
-      'oneToOne',
-      'admin::user'
-    > &
       Attribute.Private;
   };
 }
@@ -903,11 +961,6 @@ export interface ApiChapterChapter extends Schema.CollectionType {
       'manyToOne',
       'api::course.course'
     >;
-    tags: Attribute.Relation<
-      'api::chapter.chapter',
-      'oneToMany',
-      'api::tag.tag'
-    >;
     quiz: Attribute.Relation<
       'api::chapter.chapter',
       'manyToOne',
@@ -918,9 +971,14 @@ export interface ApiChapterChapter extends Schema.CollectionType {
       'manyToOne',
       'api::poll.poll'
     >;
+    tags: Attribute.Relation<
+      'api::chapter.chapter',
+      'manyToMany',
+      'api::tag.tag'
+    >;
     discussion_forum: Attribute.Relation<
       'api::chapter.chapter',
-      'manyToOne',
+      'oneToOne',
       'api::discussion-forum.discussion-forum'
     >;
     createdAt: Attribute.DateTime;
@@ -961,7 +1019,7 @@ export interface ApiCourseCourse extends Schema.CollectionType {
     Title: Attribute.String;
     Thumbnail: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     Description: Attribute.Text;
-    users_permissions_user: Attribute.Relation<
+    Author: Attribute.Relation<
       'api::course.course',
       'oneToOne',
       'plugin::users-permissions.user'
@@ -973,11 +1031,7 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       'api::chapter.chapter'
     >;
     Overview: Attribute.Blocks;
-    course_feedbacks: Attribute.Relation<
-      'api::course.course',
-      'oneToMany',
-      'api::course-feedback.course-feedback'
-    >;
+    CourseFeedback: Attribute.Component<'feedback.feedback', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -989,47 +1043,6 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::course.course',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCourseFeedbackCourseFeedback extends Schema.CollectionType {
-  collectionName: 'course_feedbacks';
-  info: {
-    singularName: 'course-feedback';
-    pluralName: 'course-feedbacks';
-    displayName: 'CourseFeedback';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Course: Attribute.Relation<
-      'api::course-feedback.course-feedback',
-      'manyToOne',
-      'api::course.course'
-    >;
-    User: Attribute.Relation<
-      'api::course-feedback.course-feedback',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    Feedback: Attribute.Component<'feedback.feedback', true>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::course-feedback.course-feedback',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::course-feedback.course-feedback',
       'oneToOne',
       'admin::user'
     > &
@@ -1044,6 +1057,7 @@ export interface ApiDiscussionForumDiscussionForum
     singularName: 'discussion-forum';
     pluralName: 'discussion-forums';
     displayName: 'DiscussionForum';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1051,10 +1065,15 @@ export interface ApiDiscussionForumDiscussionForum
   attributes: {
     Name: Attribute.String;
     Description: Attribute.Text;
-    chapters: Attribute.Relation<
+    chapter: Attribute.Relation<
+      'api::discussion-forum.discussion-forum',
+      'oneToOne',
+      'api::chapter.chapter'
+    >;
+    discussion_topics: Attribute.Relation<
       'api::discussion-forum.discussion-forum',
       'oneToMany',
-      'api::chapter.chapter'
+      'api::discussion-topic.discussion-topic'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1067,6 +1086,50 @@ export interface ApiDiscussionForumDiscussionForum
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::discussion-forum.discussion-forum',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDiscussionTopicDiscussionTopic
+  extends Schema.CollectionType {
+  collectionName: 'discussion_topics';
+  info: {
+    singularName: 'discussion-topic';
+    pluralName: 'discussion-topics';
+    displayName: 'discussion-topic';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Topic: Attribute.String;
+    Description: Attribute.Text;
+    Creator: Attribute.Relation<
+      'api::discussion-topic.discussion-topic',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    Topic_responses: Attribute.Component<'feedback.feedback', true>;
+    Discussion_forum_details: Attribute.Relation<
+      'api::discussion-topic.discussion-topic',
+      'manyToOne',
+      'api::discussion-forum.discussion-forum'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::discussion-topic.discussion-topic',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::discussion-topic.discussion-topic',
       'oneToOne',
       'admin::user'
     > &
@@ -1117,7 +1180,6 @@ export interface ApiQuizQuiz extends Schema.CollectionType {
   };
   attributes: {
     Name: Attribute.String;
-    tags: Attribute.Relation<'api::quiz.quiz', 'oneToMany', 'api::tag.tag'>;
     Description: Attribute.Blocks;
     Questions: Attribute.Component<'quiz.questions', true>;
     chapters: Attribute.Relation<
@@ -1125,6 +1187,7 @@ export interface ApiQuizQuiz extends Schema.CollectionType {
       'oneToMany',
       'api::chapter.chapter'
     >;
+    tags: Attribute.Relation<'api::quiz.quiz', 'manyToMany', 'api::tag.tag'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1141,9 +1204,10 @@ export interface ApiTagTag extends Schema.CollectionType {
     singularName: 'tag';
     pluralName: 'tags';
     displayName: 'Tag';
+    description: '';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     Name: Attribute.String;
@@ -1154,15 +1218,14 @@ export interface ApiTagTag extends Schema.CollectionType {
       'manyToMany',
       'api::course.course'
     >;
-    chapter: Attribute.Relation<
+    chapters: Attribute.Relation<
       'api::tag.tag',
-      'manyToOne',
+      'manyToMany',
       'api::chapter.chapter'
     >;
-    quiz: Attribute.Relation<'api::tag.tag', 'manyToOne', 'api::quiz.quiz'>;
+    quizzes: Attribute.Relation<'api::tag.tag', 'manyToMany', 'api::quiz.quiz'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
@@ -1188,12 +1251,13 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
+      'plugin::comments.comment': PluginCommentsComment;
+      'plugin::comments.comment-report': PluginCommentsCommentReport;
       'api::blog.blog': ApiBlogBlog;
-      'api::blog-feedback.blog-feedback': ApiBlogFeedbackBlogFeedback;
       'api::chapter.chapter': ApiChapterChapter;
       'api::course.course': ApiCourseCourse;
-      'api::course-feedback.course-feedback': ApiCourseFeedbackCourseFeedback;
       'api::discussion-forum.discussion-forum': ApiDiscussionForumDiscussionForum;
+      'api::discussion-topic.discussion-topic': ApiDiscussionTopicDiscussionTopic;
       'api::poll.poll': ApiPollPoll;
       'api::quiz.quiz': ApiQuizQuiz;
       'api::tag.tag': ApiTagTag;

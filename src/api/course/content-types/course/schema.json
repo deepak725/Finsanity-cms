@@ -35,7 +35,7 @@
     "Description": {
       "type": "text"
     },
-    "users_permissions_user": {
+    "Author": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
@@ -52,11 +52,10 @@
     "Overview": {
       "type": "blocks"
     },
-    "course_feedbacks": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::course-feedback.course-feedback",
-      "mappedBy": "Course"
+    "CourseFeedback": {
+      "type": "component",
+      "repeatable": true,
+      "component": "feedback.feedback"
     }
   }
 }

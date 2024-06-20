@@ -1,14 +1,26 @@
 {
   "collectionName": "components_feedback_comments",
   "info": {
-    "displayName": "Comments"
+    "displayName": "Comments",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "Comment": {
+    "Content": {
       "type": "string"
     },
-    "Comment_ID": {
+    "IsApproved": {
+      "type": "boolean"
+    },
+    "Author": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "Thread_Of": {
+      "type": "integer"
+    },
+    "Total_Threads": {
       "type": "integer"
     }
   }

@@ -1,21 +1,27 @@
 {
   "collectionName": "components_feedback_feedbacks",
   "info": {
-    "displayName": "Feedback"
+    "displayName": "Feedback",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "Ratings": {
-      "type": "integer"
-    },
-    "Liked": {
-      "type": "boolean"
-    },
     "Comments": {
       "displayName": "Comments",
       "type": "component",
       "repeatable": true,
       "component": "feedback.comments"
+    },
+    "Ratings": {
+      "type": "component",
+      "repeatable": true,
+      "component": "feedback.ratings"
+    },
+    "Reactions": {
+      "displayName": "Reaction",
+      "type": "component",
+      "repeatable": true,
+      "component": "feedback.reaction"
     }
   }
 }

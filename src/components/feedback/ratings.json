@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_feedback_ratings",
+  "info": {
+    "displayName": "Ratings",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Rating": {
+      "type": "decimal"
+    },
+    "Author": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_feedback_reactions",
+  "info": {
+    "displayName": "Reaction",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Reaction": {
+      "type": "enumeration",
+      "enum": [
+        "Like",
+        "Support",
+        "Surprise"
+      ]
+    },
+    "Author": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
