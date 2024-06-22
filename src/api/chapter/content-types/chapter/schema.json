@@ -63,6 +63,24 @@
       "relation": "oneToOne",
       "target": "api::discussion-forum.discussion-forum",
       "mappedBy": "chapter"
+    },
+    "Chapter_element": {
+      "type": "enumeration",
+      "enum": [
+        "Standard",
+        "Discussion_forum",
+        "Poll",
+        "Quiz",
+        "Media_Element"
+      ],
+      "required": true,
+      "default": "Standard"
+    },
+    "media_element": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::media-element.media-element",
+      "inversedBy": "chapters"
     }
   }
 }

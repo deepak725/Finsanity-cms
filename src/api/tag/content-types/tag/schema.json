@@ -41,6 +41,18 @@
       "relation": "manyToMany",
       "target": "api::quiz.quiz",
       "inversedBy": "tags"
+    },
+    "poll": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::poll.poll",
+      "inversedBy": "tags"
+    },
+    "media_element": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::media-element.media-element",
+      "inversedBy": "tags"
     }
   }
 }

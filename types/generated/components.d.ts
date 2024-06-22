@@ -95,6 +95,31 @@ export interface QuizQuestions extends Schema.Component {
   };
 }
 
+export interface ResponsesPollResponse extends Schema.Component {
+  collectionName: 'components_responses_poll_responses';
+  info: {
+    displayName: 'Poll Response';
+  };
+  attributes: {
+    Poll_Response: Attribute.Component<'responses.responses', true>;
+  };
+}
+
+export interface ResponsesResponses extends Schema.Component {
+  collectionName: 'components_responses_responses';
+  info: {
+    displayName: 'Responses';
+  };
+  attributes: {
+    Author: Attribute.Relation<
+      'responses.responses',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    Selected_Option: Attribute.Integer;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
@@ -105,6 +130,8 @@ declare module '@strapi/types' {
       'forums.topics': ForumsTopics;
       'quiz.options': QuizOptions;
       'quiz.questions': QuizQuestions;
+      'responses.poll-response': ResponsesPollResponse;
+      'responses.responses': ResponsesResponses;
     }
   }
 }

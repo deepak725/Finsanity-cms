@@ -981,6 +981,16 @@ export interface ApiChapterChapter extends Schema.CollectionType {
       'oneToOne',
       'api::discussion-forum.discussion-forum'
     >;
+    Chapter_element: Attribute.Enumeration<
+      ['Standard', 'Discussion_forum', 'Poll', 'Quiz', 'Media_Element']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'Standard'>;
+    media_element: Attribute.Relation<
+      'api::chapter.chapter',
+      'manyToOne',
+      'api::media-element.media-element'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1137,6 +1147,57 @@ export interface ApiDiscussionTopicDiscussionTopic
   };
 }
 
+export interface ApiMediaElementMediaElement extends Schema.CollectionType {
+  collectionName: 'media_elements';
+  info: {
+    singularName: 'media-element';
+    pluralName: 'media-elements';
+    displayName: 'media-element';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Audio: Attribute.Media<'audios'>;
+    Video: Attribute.Media<'videos'>;
+    Video_Youtube: Attribute.String & Attribute.Unique;
+    PDF: Attribute.Media<'files'>;
+    Media_type: Attribute.Enumeration<
+      ['Audio', 'Video', 'PDF', 'Youtube-video']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'Video'>;
+    Images: Attribute.Media<'images', true>;
+    Description: Attribute.Blocks;
+    tags: Attribute.Relation<
+      'api::media-element.media-element',
+      'oneToMany',
+      'api::tag.tag'
+    >;
+    chapters: Attribute.Relation<
+      'api::media-element.media-element',
+      'oneToMany',
+      'api::chapter.chapter'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::media-element.media-element',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::media-element.media-element',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPollPoll extends Schema.CollectionType {
   collectionName: 'polls';
   info: {
@@ -1157,6 +1218,8 @@ export interface ApiPollPoll extends Schema.CollectionType {
       'oneToMany',
       'api::chapter.chapter'
     >;
+    Response: Attribute.Component<'responses.poll-response', true>;
+    tags: Attribute.Relation<'api::poll.poll', 'oneToMany', 'api::tag.tag'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1224,6 +1287,12 @@ export interface ApiTagTag extends Schema.CollectionType {
       'api::chapter.chapter'
     >;
     quizzes: Attribute.Relation<'api::tag.tag', 'manyToMany', 'api::quiz.quiz'>;
+    poll: Attribute.Relation<'api::tag.tag', 'manyToOne', 'api::poll.poll'>;
+    media_element: Attribute.Relation<
+      'api::tag.tag',
+      'manyToOne',
+      'api::media-element.media-element'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<'api::tag.tag', 'oneToOne', 'admin::user'> &
@@ -1258,6 +1327,7 @@ declare module '@strapi/types' {
       'api::course.course': ApiCourseCourse;
       'api::discussion-forum.discussion-forum': ApiDiscussionForumDiscussionForum;
       'api::discussion-topic.discussion-topic': ApiDiscussionTopicDiscussionTopic;
+      'api::media-element.media-element': ApiMediaElementMediaElement;
       'api::poll.poll': ApiPollPoll;
       'api::quiz.quiz': ApiQuizQuiz;
       'api::tag.tag': ApiTagTag;

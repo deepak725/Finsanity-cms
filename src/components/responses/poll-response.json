@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_responses_poll_responses",
+  "info": {
+    "displayName": "Poll Response"
+  },
+  "options": {},
+  "attributes": {
+    "Poll_Response": {
+      "displayName": "Responses",
+      "type": "component",
+      "repeatable": true,
+      "component": "responses.responses"
+    }
+  }
+}

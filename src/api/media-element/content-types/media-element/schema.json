@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "media_elements",
+  "info": {
+    "singularName": "media-element",
+    "pluralName": "media-elements",
+    "displayName": "media-element",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Audio": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "audios"
+      ]
+    },
+    "Video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "Video_Youtube": {
+      "type": "string",
+      "unique": true
+    },
+    "PDF": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "Media_type": {
+      "type": "enumeration",
+      "enum": [
+        "Audio",
+        "Video",
+        "PDF",
+        "Youtube-video"
+      ],
+      "required": true,
+      "default": "Video"
+    },
+    "Images": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "Description": {
+      "type": "blocks"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tag.tag",
+      "mappedBy": "media_element"
+    },
+    "chapters": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chapter.chapter",
+      "mappedBy": "media_element"
+    }
+  }
+}

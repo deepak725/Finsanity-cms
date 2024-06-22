@@ -28,6 +28,17 @@
       "relation": "oneToMany",
       "target": "api::chapter.chapter",
       "mappedBy": "poll"
+    },
+    "Response": {
+      "type": "component",
+      "repeatable": true,
+      "component": "responses.poll-response"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tag.tag",
+      "mappedBy": "poll"
     }
   }
 }

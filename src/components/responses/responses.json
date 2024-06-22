@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_responses_responses",
+  "info": {
+    "displayName": "Responses"
+  },
+  "options": {},
+  "attributes": {
+    "Author": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "Selected_Option": {
+      "type": "integer"
+    }
+  }
+}
